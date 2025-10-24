@@ -335,7 +335,7 @@ const HomePage: React.FC = () => {
         <main>
             <section className="relative py-20 lg:py-24 bg-primary/30">
                 <div className="container mx-auto flex flex-col items-center justify-center text-center px-4">
-                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-48 w-48 md:h-56 md:w-56 mb-4"/>
+                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-48 w-auto md:h-56 mb-4"/>
                     <p className="font-sans text-xl md:text-2xl mt-2 text-text-light max-w-lg">
                         Handmade with love, our artisanal bakes are crafted to make every moment a celebration.
                     </p>
