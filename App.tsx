@@ -239,59 +239,43 @@ const CartIcon: React.FC = () => {
 };
 
 const Header: React.FC = () => {
-    const { setPage, currentUser, logout, searchTerm, setSearchTerm } = useAppContext();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(e.target.value);
-        if (e.target.value) {
-            setPage('shop');
-        }
-    };
-
-    const navLinks = (
-        <>
-            <button onClick={() => { setPage('home'); setIsMenuOpen(false); }} className="hover:text-accent transition-colors py-2">Home</button>
-            <button onClick={() => { setPage('shop'); setIsMenuOpen(false); }} className="hover:text-accent transition-colors py-2">Shop</button>
-            <button onClick={() => { setPage('gallery'); setIsMenuOpen(false); }} className="hover:text-accent transition-colors py-2">Gallery</button>
-            <button onClick={() => { setPage('contact'); setIsMenuOpen(false); }} className="hover:text-accent transition-colors py-2">Contact Us</button>
-        </>
-    );
+    const { setPage, user } = useAppContext();
 
     return (
         <header className="bg-secondary sticky top-0 z-10">
             <div className="max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
-                <a href="/" className="flex items-center gap-3">
-                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-8 w-auto" />
+                <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="flex items-center gap-3">
+                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-12 w-auto" />
                 </a>
-                <div className="hidden lg:flex items-center space-x-8">
-                    {navLinks}
-                </div>
-                <div className="flex items-center space-x-2 md:space-x-4">
-                     <div className="relative hidden md:block">
+                <nav className="hidden md:flex items-center gap-6">
+                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="hover:text-accent transition-colors">Home</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('shop'); }} className="hover:text-accent transition-colors">Shop</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('gallery'); }} className="hover:text-accent transition-colors">Gallery</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('contact'); }} className="hover:text-accent transition-colors">Contact Us</a>
+                </nav>
+                <div className="flex items-center gap-4">
+                    <div className="relative hidden md:block">
                         <input 
                             type="text" 
                             placeholder="Search bakes..."
-                            value={searchTerm}
-                            onChange={handleSearch}
                             className="w-32 md:w-48 p-2 pl-8 border border-primary/50 rounded-full focus:outline-none focus:ring-2 focus:ring-accent transition-all"
                         />
                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary absolute left-2 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <CartIcon />
-                    {currentUser ? (
-                         <div className="flex items-center space-x-2">
-                             <button onClick={() => setPage('profile')} className="p-2 hover:bg-primary/50 rounded-full transition-colors" aria-label="User Profile">
+                    {user ? (
+                         <div className="flex items-center gap-2">
+                             <a href="#" onClick={(e) => { e.preventDefault(); setPage('profile'); }} className="p-2 hover:bg-primary/50 rounded-full transition-colors" aria-label="User Profile">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-text-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
-                            </button>
-                            <button onClick={logout} className="hidden md:block bg-accent text-white px-3 py-1 rounded-full text-sm hover:bg-accent/90 transition-colors">Logout</button>
+                            </a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="hidden md:block bg-accent text-white px-3 py-1 rounded-full text-sm hover:bg-accent/90 transition-colors">Logout</a>
                          </div>
                     ) : (
-                        <div className="hidden md:flex items-center space-x-2">
-                            <button onClick={() => setPage('login')} className="px-3 py-1 rounded-full hover:bg-primary/50 transition-colors">Login</button>
-                            <button onClick={() => setPage('signup')} className="bg-accent text-white px-3 py-1 rounded-full hover:bg-accent/90 transition-colors">Sign Up</button>
+                        <div className="hidden md:flex items-center gap-2">
+                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('login'); }} className="px-3 py-1 rounded-full hover:bg-primary/50 transition-colors">Login</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('signup'); }} className="bg-accent text-white px-3 py-1 rounded-full hover:bg-accent/90 transition-colors">Sign Up</a>
                         </div>
                     )}
                     <button className="lg:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -302,13 +286,13 @@ const Header: React.FC = () => {
             {isMenuOpen && (
                  <div className="lg:hidden bg-background/95 flex flex-col items-center space-y-4 py-4 shadow-md">
                      {navLinks}
-                     {!currentUser ? (
+                     {!user ? (
                         <>
-                            <button onClick={() => { setPage('login'); setIsMenuOpen(false); }} className="w-full text-center py-2 hover:bg-primary/50">Login</button>
-                            <button onClick={() => { setPage('signup'); setIsMenuOpen(false); }} className="w-full text-center py-2 bg-accent text-white hover:bg-accent/90">Sign Up</button>
+                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('login'); }} className="w-full text-center py-2 hover:bg-primary/50">Login</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('signup'); }} className="w-full text-center py-2 bg-accent text-white hover:bg-accent/90">Sign Up</a>
                         </>
                      ) : (
-                         <button onClick={() => { logout(); setIsMenuOpen(false); }} className="w-full text-center py-2 bg-accent text-white">Logout</button>
+                         <a href="#" onClick={(e) => { e.preventDefault(); logout(); setPage('home'); }} className="w-full text-center py-2 bg-accent text-white">Logout</a>
                      )}
                 </div>
             )}
