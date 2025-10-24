@@ -1,0 +1,5 @@
+{
+  "name": "Bake Me A Wish",
+  "description": "An elegant, premium e-commerce website for a boutique home bakery named 'Bake Me A Wish.' The site handles product viewing, complex customization, a shopping cart, and a unique, WhatsApp-based order confirmation flow. It also includes a password-protected admin panel for managing products and orders.",
+  "requestFramePermissions": []
+}
