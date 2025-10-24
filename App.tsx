@@ -23,6 +23,46 @@ interface Product {
     }
 }
 
+// Inline category icons to replace missing external SVGs
+const CategoryIcon: React.FC<{ name: Product['category']; className?: string }> = ({ name, className = "w-12 h-12 text-text-light" }) => {
+  switch (name) {
+    case 'Celebration Cakes':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3v4M8 11h8a3 3 0 0 1 3 3v5H5v-5a3 3 0 0 1 3-3z" />
+          <path d="M8 16c1 .8 2 .8 3 0s2-.8 3 0 2 .8 3 0" />
+        </svg>
+      );
+    case 'Tea Time Cakes':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 10h13v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-3z" />
+          <path d="M16 11h2a3 3 0 1 1 0 6h-2" />
+          <path d="M7 6s2 0 2 2-2 2-2 4" />
+        </svg>
+      );
+    case 'Cookies':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="7" />
+          <circle cx="10" cy="10" r="1" />
+          <circle cx="14" cy="8" r="1" />
+          <circle cx="15" cy="13" r="1" />
+          <circle cx="9" cy="14" r="1" />
+        </svg>
+      );
+    case 'Healthy Treats':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-7-7 7 7 0 0 0-7 7c0 4 3 7 7 10z" />
+          <path d="M9 11c1-2 3-3 6-3" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 interface CartItem {
     product: Product;
     quantity: number;
@@ -1035,43 +1075,3 @@ const MainContent: React.FC = () => {
 }
 
 export default App;
-
-// Inline category icons to replace missing external SVGs
-const CategoryIcon: React.FC<{ name: Product['category']; className?: string }> = ({ name, className = "w-12 h-12 text-text-light" }) => {
-  switch (name) {
-    case 'Celebration Cakes':
-      return (
-        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 3v4M8 11h8a3 3 0 0 1 3 3v5H5v-5a3 3 0 0 1 3-3z" />
-          <path d="M8 16c1 .8 2 .8 3 0s2-.8 3 0 2 .8 3 0" />
-        </svg>
-      );
-    case 'Tea Time Cakes':
-      return (
-        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 10h13v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-3z" />
-          <path d="M16 11h2a3 3 0 1 1 0 6h-2" />
-          <path d="M7 6s2 0 2 2-2 2-2 4" />
-        </svg>
-      );
-    case 'Cookies':
-      return (
-        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="7" />
-          <circle cx="10" cy="10" r="1" />
-          <circle cx="14" cy="8" r="1" />
-          <circle cx="15" cy="13" r="1" />
-          <circle cx="9" cy="14" r="1" />
-        </svg>
-      );
-    case 'Healthy Treats':
-      return (
-        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-7-7 7 7 0 0 0-7 7c0 4 3 7 7 10z" />
-          <path d="M9 11c1-2 3-3 6-3" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
