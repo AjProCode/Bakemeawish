@@ -239,19 +239,31 @@ const CartIcon: React.FC = () => {
 };
 
 const Header: React.FC = () => {
-    const { setPage, user } = useAppContext();
+    const { setPage, currentUser, logout } = useAppContext();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleNavClick = (page: string) => {
+        setPage(page);
+        setIsMenuOpen(false);
+    };
+
+    const navLinks = (
+        <>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} className="hover:text-accent transition-colors">Home</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('shop'); }} className="hover:text-accent transition-colors">Shop</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('gallery'); }} className="hover:text-accent transition-colors">Gallery</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }} className="hover:text-accent transition-colors">Contact Us</a>
+        </>
+    );
 
     return (
         <header className="bg-secondary sticky top-0 z-10">
             <div className="max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
-                <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="flex items-center gap-3">
+                <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} className="flex items-center gap-3">
                     <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-12 w-auto" />
                 </a>
                 <nav className="hidden md:flex items-center gap-6">
-                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="hover:text-accent transition-colors">Home</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('shop'); }} className="hover:text-accent transition-colors">Shop</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('gallery'); }} className="hover:text-accent transition-colors">Gallery</a>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setPage('contact'); }} className="hover:text-accent transition-colors">Contact Us</a>
+                    {navLinks}
                 </nav>
                 <div className="flex items-center gap-4">
                     <div className="relative hidden md:block">
@@ -263,19 +275,19 @@ const Header: React.FC = () => {
                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary absolute left-2 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <CartIcon />
-                    {user ? (
+                    {currentUser ? (
                          <div className="flex items-center gap-2">
-                             <a href="#" onClick={(e) => { e.preventDefault(); setPage('profile'); }} className="p-2 hover:bg-primary/50 rounded-full transition-colors" aria-label="User Profile">
+                             <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('profile'); }} className="p-2 hover:bg-primary/50 rounded-full transition-colors" aria-label="User Profile">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-text-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('home'); }} className="hidden md:block bg-accent text-white px-3 py-1 rounded-full text-sm hover:bg-accent/90 transition-colors">Logout</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); logout(); }} className="hidden md:block bg-accent text-white px-3 py-1 rounded-full text-sm hover:bg-accent/90 transition-colors">Logout</a>
                          </div>
                     ) : (
                         <div className="hidden md:flex items-center gap-2">
-                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('login'); }} className="px-3 py-1 rounded-full hover:bg-primary/50 transition-colors">Login</a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('signup'); }} className="bg-accent text-white px-3 py-1 rounded-full hover:bg-accent/90 transition-colors">Sign Up</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('login'); }} className="px-3 py-1 rounded-full hover:bg-primary/50 transition-colors">Login</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('signup'); }} className="bg-accent text-white px-3 py-1 rounded-full hover:bg-accent/90 transition-colors">Sign Up</a>
                         </div>
                     )}
                     <button className="lg:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -285,14 +297,16 @@ const Header: React.FC = () => {
             </div>
             {isMenuOpen && (
                  <div className="lg:hidden bg-background/95 flex flex-col items-center space-y-4 py-4 shadow-md">
-                     {navLinks}
-                     {!user ? (
+                     <div className="flex flex-col items-center space-y-4">
+                        {navLinks}
+                     </div>
+                     {!currentUser ? (
                         <>
-                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('login'); }} className="w-full text-center py-2 hover:bg-primary/50">Login</a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); setPage('signup'); }} className="w-full text-center py-2 bg-accent text-white hover:bg-accent/90">Sign Up</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('login'); }} className="w-full text-center py-2 hover:bg-primary/50">Login</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); handleNavClick('signup'); }} className="w-full text-center py-2 bg-accent text-white hover:bg-accent/90">Sign Up</a>
                         </>
                      ) : (
-                         <a href="#" onClick={(e) => { e.preventDefault(); logout(); setPage('home'); }} className="w-full text-center py-2 bg-accent text-white">Logout</a>
+                         <a href="#" onClick={(e) => { e.preventDefault(); logout(); setIsMenuOpen(false); }} className="w-full text-center py-2 bg-accent text-white">Logout</a>
                      )}
                 </div>
             )}
