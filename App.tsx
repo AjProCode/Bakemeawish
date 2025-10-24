@@ -1,4 +1,3 @@
-
 import React, { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react';
 
 const LOGO_URL = "/Logo.png";
@@ -220,11 +219,11 @@ const Header: React.FC = () => {
     );
 
     return (
-        <header className="sticky top-0 bg-background/80 backdrop-blur-sm z-50 shadow-sm">
-            <nav className="container mx-auto px-6 py-2 flex justify-between items-center">
-                <div onClick={() => setPage('home')} className="cursor-pointer">
-                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-16 w-auto"/>
-                </div>
+        <header className="bg-secondary sticky top-0 z-10">
+            <div className="max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
+                <a href="/" className="flex items-center gap-3">
+                    <img src={LOGO_URL} alt="Bake Me A Wish Logo" className="h-8 w-auto" />
+                </a>
                 <div className="hidden lg:flex items-center space-x-8">
                     {navLinks}
                 </div>
@@ -259,7 +258,7 @@ const Header: React.FC = () => {
                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                 </div>
-            </nav>
+            </div>
             {isMenuOpen && (
                  <div className="lg:hidden bg-background/95 flex flex-col items-center space-y-4 py-4 shadow-md">
                      {navLinks}
@@ -289,12 +288,7 @@ const StaticPage: React.FC<{title: string, children: React.ReactNode}> = ({ titl
 
 const HomePage: React.FC = () => {
     const { setPage, products } = useAppContext();
-    const categories = [
-        { name: 'Celebration Cakes' },
-        { name: 'Tea Time Cakes' },
-        { name: 'Cookies' },
-        { name: 'Healthy Treats' },
-    ];
+    const collections: Product['category'][] = ['Celebration Cakes', 'Tea Time Cakes', 'Cookies', 'Healthy Treats'];
     const featuredProducts = products.slice(0, 3);
     
     return (
@@ -314,13 +308,11 @@ const HomePage: React.FC = () => {
              <section className="py-16">
                 <div className="container mx-auto px-6 text-center">
                     <h2 className="text-4xl font-display mb-12">Our Collections</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {categories.map(cat => (
-                            <div key={cat.name} onClick={() => setPage(`shop/${cat.name}`)} className="group cursor-pointer flex flex-col items-center text-center">
-                                <div className="bg-secondary h-48 w-48 rounded-lg flex items-center justify-center shadow-md transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-xl">
-                                    <BrandedPlaceholder className="h-full w-full rounded-lg" />
-                                </div>
-                                <h3 className="text-xl font-display text-text-dark mt-4">{cat.name}</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {collections.map((c) => (
+                            <div key={c} className="bg-secondary rounded-xl p-6 text-center hover:shadow-sm transition">
+                              <CategoryIcon name={c} className="w-12 h-12 mx-auto mb-3 text-text-light" />
+                              <div className="text-text-dark font-medium">{c}</div>
                             </div>
                         ))}
                     </div>
@@ -1043,3 +1035,43 @@ const MainContent: React.FC = () => {
 }
 
 export default App;
+
+// Inline category icons to replace missing external SVGs
+const CategoryIcon: React.FC<{ name: Product['category']; className?: string }> = ({ name, className = "w-12 h-12 text-text-light" }) => {
+  switch (name) {
+    case 'Celebration Cakes':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3v4M8 11h8a3 3 0 0 1 3 3v5H5v-5a3 3 0 0 1 3-3z" />
+          <path d="M8 16c1 .8 2 .8 3 0s2-.8 3 0 2 .8 3 0" />
+        </svg>
+      );
+    case 'Tea Time Cakes':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 10h13v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-3z" />
+          <path d="M16 11h2a3 3 0 1 1 0 6h-2" />
+          <path d="M7 6s2 0 2 2-2 2-2 4" />
+        </svg>
+      );
+    case 'Cookies':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="7" />
+          <circle cx="10" cy="10" r="1" />
+          <circle cx="14" cy="8" r="1" />
+          <circle cx="15" cy="13" r="1" />
+          <circle cx="9" cy="14" r="1" />
+        </svg>
+      );
+    case 'Healthy Treats':
+      return (
+        <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 21c4-3 7-6 7-10a7 7 0 0 0-7-7 7 7 0 0 0-7 7c0 4 3 7 7 10z" />
+          <path d="M9 11c1-2 3-3 6-3" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
