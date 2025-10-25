@@ -147,25 +147,42 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         setOrders(prev => prev.map(o => o.id === orderId ? {...o, status} : o));
     };
 
-    const login = (email: string, pass: string): boolean => {
-        const user = users.find(u => u.email === email && u.password === pass);
-        if (user) {
-            const { password, ...userToStore } = user; // Don't store password in currentUser
-            setCurrentUser(userToStore);
+    const login = useCallback((email: string, password: string): boolean => {
+        // In a real app, this would be an API call
+        // For this demo, we'll check against a hardcoded admin and registered users
+        if (email === 'admin@bakemeawish.com' && password === 'admin123') {
+            const adminUser: User = { id: 'admin', name: 'Admin', email: 'admin@bakemeawish.com', role: 'admin' };
+            setCurrentUser(adminUser);
+            localStorage.setItem('user', JSON.stringify(adminUser));
+            setPage('admin');
             return true;
         }
-        return false;
-    };
 
-    const signup = (userData: Omit<User, 'id'>): boolean => {
-        if (users.some(u => u.email === userData.email)) return false; // Email exists
-        const newUser = { ...userData, id: Date.now() };
-        setUsers(prev => [...prev, newUser]);
-        const { password, ...userToStore } = newUser;
-        setCurrentUser(userToStore);
+        const registeredUsers: User[] = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        const foundUser = registeredUsers.find(u => u.email === email && u.password === password);
+        if (foundUser) {
+            setCurrentUser(foundUser);
+            localStorage.setItem('user', JSON.stringify(foundUser));
+            setPage('home');
+            return true;
+        }
+
+        return false;
+    }, []);
+
+    const signup = useCallback((name: string, email: string, password: string): boolean => {
+        const registeredUsers: User[] = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        if (registeredUsers.find(u => u.email === email)) {
+            return false; // User already exists
+        }
+        const newUser: User = { id: Date.now(), name, email, password, phone: '', address: '' };
+        localStorage.setItem('user', JSON.stringify(newUser));
+        localStorage.setItem('registeredUsers', JSON.stringify([...registeredUsers, newUser]));
+        setCurrentUser(newUser);
+        setPage('home');
         return true;
-    };
-    
+    }, []);
+
     const logout = () => {
         setCurrentUser(null);
         setPage('home');
@@ -758,7 +775,7 @@ const LoginPage: React.FC = () => {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         if (login(email, password)) {
-            if (email === 'admin@bakeme.com') {
+            if (email === 'admin@bakemeawish.com') {
                 setPage('admin');
             } else {
                 setPage('home');
@@ -1030,19 +1047,16 @@ const MainContent: React.FC = () => {
     const { page, currentUser } = useAppContext();
 
     const renderPage = () => {
-        const pageName = page.split('/')[0];
-        
-        switch (pageName) {
+        switch (page) {
             case 'home': return <HomePage />;
             case 'shop': return <ShopPage />;
-            case 'product': return <ProductDetailPage />;
+            case 'product': return <ProductPage />;
             case 'cart': return <CartPage />;
             case 'checkout': return <CheckoutPage />;
-            case 'confirm': return <ConfirmationPage />;
             case 'login': return <LoginPage />;
-            case 'signup': return <SignupPage />;
+            case 'signup': return <SignUpPage />;
             case 'profile': return currentUser ? <ProfilePage /> : <LoginPage />;
-            case 'admin': return currentUser?.email === 'admin@bakeme.com' ? <AdminPanel /> : <HomePage />;
+            case 'admin': return currentUser?.role === 'admin' ? <AdminPanel /> : <HomePage />;
             case 'gallery': return <StaticPage title="Gallery"><p className="text-center">Our beautiful creations will be displayed here soon!</p></StaticPage>;
             case 'contact': return <StaticPage title="Contact Us">
                 <div className="text-center space-y-4">
